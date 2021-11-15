@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import pages.AbstractPage;
 import pages.LoginPage;
+import pages.MainPage;
 import pages.TicketsPage;
 
 import java.io.IOException;
@@ -22,16 +23,11 @@ public class HelpdeskUITest {
 
     @Before
     public void setup() throws IOException {
-        // Читаем конфигурационный файл в System.properties
         System.getProperties().load(ClassLoader.getSystemResourceAsStream("config.properties"));
-        // Создание экземпляра драйвера
+        System.getProperties().load(ClassLoader.getSystemResourceAsStream("user.properties"));
         driver = new ChromeDriver();
-        // Устанавливаем размер окна браузера, как максимально возможный
         driver.manage().window().maximize();
-        // Установим время ожидания для поиска элементов
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        // Установить созданный драйвер для поиска в веб-страницах
-        AbstractPage.setDriver(driver);
     }
 
     //    Открыть страницу https://at-sandbox.workbench.lanit.ru/
@@ -42,35 +38,30 @@ public class HelpdeskUITest {
 
     @Test
     public void createTicketTest() throws IOException, InterruptedException {
-        System.getProperties().load(ClassLoader.getSystemResourceAsStream("user.properties"));
-        driver.get(System.getProperty("site.url"));
-        driver.get(System.getProperty("pageTicketsSubmit.url"));
+        new MainPage(driver).open();
 
-        TicketsPage ticketsPage = new TicketsPage();
         TicketPojo ticket = new TicketPojo();
-        ticket.setQueue("Some Product");
-        ticket.setSummary("My homework");
-        ticket.setDescription("Please help me make my homework");
-        ticket.setPriority("3. Normal");
-        ticket.setDateCreated(LocalDate.parse("2021-11-15"));
-        ticket.setEmail("someadressl@mail.ru");
+            ticket.setQueue("Some Product");
+            ticket.setSummary("My homework");
+            ticket.setDescription("Please help me make my homework");
+            ticket.setPriority("3. Normal");
+            ticket.setDateCreated(LocalDate.parse("2021-11-17"));
+            ticket.setEmail("someadressl@mail.ru");
+
+        TicketsPage ticketsPage = new TicketsPage(driver);
+        ticketsPage.open();
         ticketsPage.createTicket(ticket);
 
-        driver.get(System.getProperty("pageLogin.url"));
-        LoginPage loginPage = new LoginPage();
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.open();
         loginPage.login(System.getProperty("user"), System.getProperty("password"));
-
-        ticketsPage.openTicketPage(ticket);
+        ticketsPage.openTicket(ticket);
 
         String summary = driver.findElement(By.xpath("//*[@id=\"content-wrapper\"]//table/thead/tr/th/h3")).getText();
-        System.out.println("Found summary: " + summary);
         String description = driver.findElement(By.xpath("//*[@id=\"ticket-description\"]/p")).getText();
-        System.out.println("Found description: " + description);
         String email = driver.findElement(By.xpath("//*[@id=\"content-wrapper\"]/div/div[1]/div/div/table/tbody/tr[2]/td[2]")).getText();
-        System.out.println("Found email: " + email);
         String dateCreated = driver.findElement(By.xpath("//*[@id=\"content-wrapper\"]/div/div[1]/div/div/table/tbody/tr[1]/td[1]")).getText();
         LocalDate date = LocalDate.parse(dateCreated.substring(0, 13), DateTimeFormatter.ofPattern("MMM. dd, yyyy", Locale.ROOT));
-        System.out.println("Found date: " + date);
 
         Assert.assertTrue("Summary does not match", summary.contains(ticket.getSummary()));
         Assert.assertTrue("Description does not match", description.contains(ticket.getDescription()));

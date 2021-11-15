@@ -1,35 +1,27 @@
 package pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 public class LoginPage extends AbstractPage {
+    private static final String URL_LOGIN = System.getProperty("pageLogin.url");
 
+    public LoginPage(WebDriver driver) {
+        super(driver);
+        this.url = URL_LOGIN;
+    }
 
-    // Обычный поиск элемента
-//    private WebElement inputTextUser = driver.findElement(By.id("username"));
-//    @FindBy(xpath = "//*[contains(@id, 'username')]")
-        private WebElement inputTextUser = driver.findElement(By.xpath("//*[contains(@id, 'username')]"));
+    @FindBy(xpath = "//*[contains(@id, 'username')]")
+    private WebElement inputTextUser;
 
-    // Поиск элемента через аннотацию
-//    @FindBy(id = "password")
-//    @FindBy(xpath = "//*[contains(@id, 'password')]")
-//    private WebElement inputTextPassword;
-    private WebElement inputTextPassword = driver.findElement(By.xpath("//*[contains(@id, 'password')]"));
+    @FindBy(xpath = "//*[contains(@id, 'password')]")
+    private WebElement inputTextPassword;
 
-
-    // Обычный поиск элемента
-//    private WebElement inputSubmit = driver.findElement(By.xpath("//a[@type='submit']"));
-    private WebElement inputSubmit = driver.findElement(By.xpath("//*[@id=\"content-wrapper\"]/div/div/div/div[2]/form/input[1]"));
-
-
-    // todo: остальные элементы страницы
+    @FindBy(xpath = "//*[@id=\"content-wrapper\"]/div/div/div/div[2]/form/input[1]")
+    private WebElement inputSubmit;
 
     public void login(String user, String password) {
-        // todo
         inputTextUser.sendKeys(user);
         inputTextPassword.sendKeys(password);
         inputSubmit.click();
