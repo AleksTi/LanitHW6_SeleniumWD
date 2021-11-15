@@ -2,3 +2,6 @@
 /out/
 /target/
 *.iml
+
+src/main/resources/config.properties
+src/main/resources/user.properties
