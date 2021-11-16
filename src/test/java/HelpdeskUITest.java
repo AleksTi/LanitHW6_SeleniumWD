@@ -5,16 +5,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import pages.LoginPage;
-import pages.MainPage;
-import pages.TicketsPage;
+import pages.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
 public class HelpdeskUITest {
-
     private WebDriver driver;
 
     @Before
@@ -43,11 +40,9 @@ public class HelpdeskUITest {
             ticket.setEmail("someadressl@mail.ru");
 
         new MainPage(driver).open();
-        TicketsPage ticketsPage = new TicketsPage(driver);
-        ticketsPage.createTicket(ticket);
+        new TicketSubmitPage(driver).createTicket(ticket);
         new LoginPage(driver).login(System.getProperty("user"), System.getProperty("password"));
-        ticketsPage.openTicket(ticket);
-        TicketPojo foundTicket = ticketsPage.getOpenedTicket();
+        TicketPojo foundTicket = new TicketUnitPage(driver, new TicketListPage(driver).findTicketUrl(ticket)).getFoundTicket();
 
         Assert.assertTrue("Summary does not match", foundTicket.getSummary().contains(ticket.getSummary()));
         Assert.assertTrue("Description does not match", foundTicket.getDescription().contains(ticket.getDescription()));
