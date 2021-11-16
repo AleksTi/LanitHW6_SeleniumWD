@@ -3,5 +3,5 @@
 /target/
 *.iml
 
-src/main/resources/config.properties
-src/main/resources/user.properties
+/src/main/resources/config.properties
+/src/main/resources/user.properties

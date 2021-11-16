@@ -22,6 +22,7 @@ public class LoginPage extends AbstractPage {
     private WebElement inputSubmit;
 
     public void login(String user, String password) {
+        this.open();
         inputTextUser.sendKeys(user);
         inputTextPassword.sendKeys(password);
         inputSubmit.click();
