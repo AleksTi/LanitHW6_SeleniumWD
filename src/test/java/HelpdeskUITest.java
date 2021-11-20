@@ -7,11 +7,9 @@ import pages.*;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
-import ru.yandex.qatools.ashot.shooting.ShootingStrategy;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -26,20 +24,13 @@ public class HelpdeskUITest {
     private WebDriver driver;
 
     @Before
-    public void setup() throws IOException, ClassNotFoundException {
+    public void setup() throws IOException {
         System.getProperties().load(ClassLoader.getSystemResourceAsStream("config.properties"));
         System.getProperties().load(ClassLoader.getSystemResourceAsStream("user.properties"));
-        System.setProperty("webdriver.chrome.driver", System.getProperty("webdriver.chrome.driver"));
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
-
-    //    Открыть страницу https://at-sandbox.workbench.lanit.ru/
-    //    Создать ticket
-    //    Выполнить логин (login: admin, pass: adminat)
-    //    Через поиск найти созданный тикет и
-    //    убедиться, что данные соответствуют введенным в п. 2.
 
     @Test
     @Description("Тест для создания и проверки Ticket")
@@ -70,16 +61,10 @@ public class HelpdeskUITest {
         takeScreenshot();
     }
 
-    @Test
+    @Step("Сравнение чисел Doubles {num1} и числа {num2}")
     @Description("Тест для наполнения отчёта и графика Allure")
-    public void runEmptyOkTestForAllureReport() {
-        Assert.assertEquals("Double is not Ok..!!", 1.0, 1.0, 0.0);
-    }
-
-    @Test
-    @Description("Тест для наполнения отчёта и графика Allure")
-    public void runEmptyNokTestForAllureReport() {
-        Assert.assertEquals("Double is not Ok..!!", 1.0, 2.0, 0.0);
+    public void runEmptyTestForAllureReport(double num1, double num2) {
+        Assert.assertEquals("Double is not Ok..!!", num1, num2, 0.0);
     }
 
     @Step("Проверка суммы числа {num1} и числа {num2}")
@@ -95,6 +80,12 @@ public class HelpdeskUITest {
     public void checkSumTest() throws IOException {
         checkSumStep(3, 2, 5);
         checkSumStep(5, 4, 9);
+    }
+
+    @Test
+    public void compareDoublesTest() {
+        runEmptyTestForAllureReport(1.0, 1.0);
+        runEmptyTestForAllureReport(1.0, 2.0);
     }
 
     @Attachment(value = "Вложение статичной картинки", type = "image/png", fileExtension = ".png")
@@ -114,10 +105,10 @@ public class HelpdeskUITest {
         File file = new File("src/main/resources/images/screenshots/" + currentTime + ".png");
         ImageIO.write(bufferedImage, "png", file);
 
-        //Сохрание скриншота как вложение в Allure
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(bufferedImage, "png", baos);
-        return baos.toByteArray();
+        //Сохранение скриншота как вложение в Allure
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
     }
 
     @After

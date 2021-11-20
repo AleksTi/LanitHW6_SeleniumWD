@@ -28,37 +28,27 @@
             <version>4.13</version>
             <scope>test</scope>
         </dependency>
-
-<!-- start allure: Подключаем Allure-->
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-junit4</artifactId>
             <version>${allure-junit4.version}</version>
             <scope>test</scope>
         </dependency>
-<!-- finish allure: Подключаем Allure-->
-
         <dependency>
             <groupId>ru.yandex.qatools.ashot</groupId>
             <artifactId>ashot</artifactId>
             <version>1.5.4</version>
         </dependency>
-
     </dependencies>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-
-<!-- start allure-->
         <aspectj.version>1.8.10</aspectj.version>
         <allure-junit4.version>2.8.1</allure-junit4.version>
-<!-- finish allure-->
-
     </properties>
 
-<!-- start allure-->
     <build>
         <plugins>
             <plugin>
@@ -97,23 +87,18 @@
                     </dependency>
                 </dependencies>
             </plugin>
-
             <plugin>
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>
                 <version>2.9</version>
                 <configuration>
                     <reportVersion>2.7.0</reportVersion>
-
 <!--                    <installDirectory>${project.build.directory}</installDirectory>-->
                     <allureDownloadUrl>
                         https://github.com/allure-framework/allure2/releases/download/2.7.0/allure-2.7.0.zip
                     </allureDownloadUrl>
-
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
-<!-- finish allure-->
 </project>

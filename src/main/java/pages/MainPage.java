@@ -9,6 +9,4 @@ public class MainPage extends AbstractPage {
         super(driver);
         this.url = URL_MAIN;
     }
-
-
 }
