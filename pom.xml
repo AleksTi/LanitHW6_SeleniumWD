@@ -8,6 +8,14 @@
     <artifactId>HelpdeskUITest</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+<!--    <pluginRepositories>-->
+<!--        <pluginRepository>-->
+<!--            <id>central</id>-->
+<!--            <name>Maven Plugin Repository</name>-->
+<!--            <url>https://repo1.maven.org/maven2</url>-->
+<!--        </pluginRepository>-->
+<!--    </pluginRepositories>-->
+
     <dependencies>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
@@ -20,9 +28,86 @@
             <version>4.13</version>
             <scope>test</scope>
         </dependency>
+
+<!-- start allure: Подключаем Allure-->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit4</artifactId>
+            <version>${allure-junit4.version}</version>
+            <scope>test</scope>
+        </dependency>
+<!-- finish allure: Подключаем Allure-->
+
     </dependencies>
+
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+
+<!-- start allure-->
+        <aspectj.version>1.8.10</aspectj.version>
+        <allure-junit4.version>2.8.1</allure-junit4.version>
+<!-- finish allure-->
+
     </properties>
+
+<!-- start allure-->
+    <build>
+        <plugins>
+            <plugin>
+                <!--Подключаем Surefire плагин-->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12.4</version>
+                <!--Настраиваем запуск aspectj-->
+                <configuration>
+                    <testFailureIgnore>false</testFailureIgnore>
+                    <argLine>
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                    </argLine>
+                    <properties>
+                        <!--Правила для сбора информации Allure, на которые смотрит aspectj при работе-->
+                        <property>
+                            <name>listener</name>
+                            <value>io.qameta.allure.junit4.AllureJunit4</value>
+                        </property>
+                    </properties>
+                    <systemProperties>
+                        <!--Результаты Allure складываются в отдельную дирректорию в новом формате-->
+                        <property>
+                            <name>allure.results.directory</name>
+                            <value>${project.build.directory}/allure-results</value>
+                        </property>
+                    </systemProperties>
+                </configuration>
+                <!--Зависимость для aspectj-->
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjweaver</artifactId>
+                        <version>${aspectj.version}</version>
+<!--                        <scope>runtime</scope>-->
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <reportVersion>2.7.0</reportVersion>
+
+<!--                    <installDirectory>${project.build.directory}</installDirectory>-->
+                    <allureDownloadUrl>
+                        https://github.com/allure-framework/allure2/releases/download/2.7.0/allure-2.7.0.zip
+                    </allureDownloadUrl>
+
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+<!-- finish allure-->
 </project>

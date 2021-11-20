@@ -1,13 +1,13 @@
+import io.qameta.allure.*;
 import model.pojo.TicketPojo;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import pages.*;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
@@ -30,6 +30,7 @@ public class HelpdeskUITest {
     //    убедиться, что данные соответствуют введенным в п. 2.
 
     @Test
+    @Description("Тест для создания и проверки Ticket")
     public void createTicketTest() {
         TicketPojo ticket = new TicketPojo();
             ticket.setQueue("Some Product");
@@ -48,6 +49,36 @@ public class HelpdeskUITest {
         Assert.assertTrue("Description does not match", foundTicket.getDescription().contains(ticket.getDescription()));
         Assert.assertTrue("email does not match", foundTicket.getEmail().toLowerCase().contains(ticket.getEmail().toLowerCase()));
         Assert.assertTrue("Date of creation does not match", foundTicket.getDateCreated().isEqual(ticket.getDateCreated()));
+    }
+
+    @Test
+    public void runEmptyOkTestForAllureReport() {
+        Assert.assertEquals("Double is not Ok..!!", 1.0, 1.0, 0.0);
+    }
+
+
+    @Test
+    public void runEmptyNokTestForAllureReport() {
+        Assert.assertEquals("Double is not Ok..!!", 1.0, 2.0, 0.0);
+    }
+
+    @Step("Проверка суммы числа {num1} и числа {num2}")
+    public void checkSumStep(int num1, int num2, int expectedSum) throws IOException {
+        Assert.assertEquals("Sum is wrong", expectedSum, num1 + num2);
+        getBytes("images/img.png");
+        //Добавление вложения при помощи статического метода
+        Allure.addAttachment("Результат", "text/plain", "https://yandex.ru");
+    }
+
+    @Test
+    public void checkSumTest() throws IOException {
+        checkSumStep(3, 2, 5);
+        checkSumStep(5, 4, 9);
+    }
+
+    @Attachment(value = "Вложение", type = "image/png", fileExtension = ".png")
+    public byte[] getBytes(String resourceName) throws IOException {
+        return Files.readAllBytes(Paths.get("src/main/resources", resourceName));
     }
 
     @After
