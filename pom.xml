@@ -38,6 +38,12 @@
         </dependency>
 <!-- finish allure: Подключаем Allure-->
 
+        <dependency>
+            <groupId>ru.yandex.qatools.ashot</groupId>
+            <artifactId>ashot</artifactId>
+            <version>1.5.4</version>
+        </dependency>
+
     </dependencies>
 
     <properties>
