@@ -15,9 +15,11 @@ public class LoginPage extends AbstractPage {
     @FindBy(xpath = "//*[contains(@id, 'username')]")
     private WebElement inputTextUser;
 
+    // TODO: хороший xapth
     @FindBy(xpath = "//*[contains(@id, 'password')]")
     private WebElement inputTextPassword;
 
+    // TODO: плохой xpath /div/div/div/div[2]/form/input[1]
     @FindBy(xpath = "//*[@id=\"content-wrapper\"]/div/div/div/div[2]/form/input[1]")
     private WebElement inputSubmit;
 

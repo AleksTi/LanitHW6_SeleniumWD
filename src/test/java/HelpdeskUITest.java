@@ -34,7 +34,7 @@ public class HelpdeskUITest {
 
     @Test
     @Description("Тест для создания и проверки Ticket")
-    public void createTicketTest() throws IOException {
+    public void createTicketTest() throws IOException { // TODO: убрать проброс исключения
         TicketPojo ticket = new TicketPojo();
         ticket.setQueue("Some Product");
         ticket.setSummary("My homework");
@@ -45,6 +45,7 @@ public class HelpdeskUITest {
 
         openMainPage();
         new TicketSubmitPage(driver).createTicket(ticket);
+        // TODO: здесь скриншоты делать не надо, переносим в методы с аннотацией Step
         takeScreenshot();
         new LoginPage(driver).login(System.getProperty("user"), System.getProperty("password"));
         TicketPojo foundTicket = new TicketUnitPage(driver, new TicketListPage(driver).findTicketUrl(ticket)).getFoundTicket();
@@ -55,6 +56,8 @@ public class HelpdeskUITest {
         Assert.assertTrue("Date of creation does not match", foundTicket.getDateCreated().isEqual(ticket.getDateCreated()));
     }
 
+    // TODO: аннотацию Step используем только для методов PageObject
+    // TODO: например можно реалтзовать метод open() в абстрактом классе, и тогда он будет у всех потомков
     @Step
     public void openMainPage() throws IOException {
         new MainPage(driver).open();
@@ -67,6 +70,7 @@ public class HelpdeskUITest {
         Assert.assertEquals("Double is not Ok..!!", num1, num2, 0.0);
     }
 
+    // TODO: лишний метод
     @Step("Проверка суммы числа {num1} и числа {num2}")
     public void checkSumStep(int num1, int num2, int expectedSum) throws IOException {
         Assert.assertEquals("Sum is wrong", expectedSum, num1 + num2);
@@ -76,23 +80,28 @@ public class HelpdeskUITest {
         Allure.addAttachment("Результат", "text/plain", "https://yandex.ru");
     }
 
+    // TODO: лишний метод
     @Test
     public void checkSumTest() throws IOException {
         checkSumStep(3, 2, 5);
         checkSumStep(5, 4, 9);
     }
 
+    // TODO: лишний метод
     @Test
     public void compareDoublesTest() {
         runEmptyTestForAllureReport(1.0, 1.0);
         runEmptyTestForAllureReport(1.0, 2.0);
     }
 
+    // TODO: лишний метод
     @Attachment(value = "Вложение статичной картинки", type = "image/png", fileExtension = ".png")
     public byte[] getBytes(String resourceName) throws IOException {
         return Files.readAllBytes(Paths.get("src/main/resources", resourceName));
     }
 
+    // TODO: перенести в абстрактный класс PageObject или в класс с хуками
+    // TODO: не пробрасывать исключение, сразу обработать
     @Attachment(value = "Вложение Ashot", type = "image/png", fileExtension = ".png")
     public byte[] takeScreenshot() throws IOException {
         Screenshot screenshot = new AShot()
@@ -101,6 +110,7 @@ public class HelpdeskUITest {
         BufferedImage bufferedImage = screenshot.getImage();
 
         //Сохранение скриншота в папку resources/images/screenshots
+        // TODO: убрать сохраниение скриншота в проект, отправляем только в аллюр отчёт
         String currentTime = DateTimeFormatter.ofPattern("dd-MM-yyyy HH-mm").format(LocalDateTime.now());
         File file = new File("src/main/resources/images/screenshots/" + currentTime + ".png");
         ImageIO.write(bufferedImage, "png", file);
@@ -111,6 +121,7 @@ public class HelpdeskUITest {
         return byteArrayOutputStream.toByteArray();
     }
 
+    // TODO: *tearDown()
     @After
     public void tierDown() {
         driver.quit();
