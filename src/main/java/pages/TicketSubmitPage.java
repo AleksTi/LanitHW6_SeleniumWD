@@ -1,5 +1,7 @@
 package pages;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
 import model.pojo.TicketPojo;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -32,12 +34,10 @@ public class TicketSubmitPage extends AbstractPage {
     @FindBy(xpath = "//*[@id=\"id_submitter_email\"]")
     private WebElement email;
 
-    @FindBy(xpath = "//*[@id=\"content-wrapper\"]/div/div/div/div[2]//form/button")
+    @FindBy(xpath = "//*[@id=\"content-wrapper\"]//form/button")
     private WebElement submit;
 
-
-
-
+    @Step("Создание ticket {ticket.summary}")
     public void createTicket(TicketPojo ticket){
         this.open();
         new Select(queue).selectByVisibleText(ticket.getQueue());
@@ -47,7 +47,6 @@ public class TicketSubmitPage extends AbstractPage {
         dueOnDate.sendKeys(ticket.getDateCreated().toString());
         email.sendKeys(ticket.getEmail());
         submit.click();
+        takeScreenshot();
     }
-
-
 }

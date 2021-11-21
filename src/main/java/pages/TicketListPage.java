@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Step;
 import model.pojo.TicketPojo;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -22,10 +23,12 @@ public class TicketListPage extends AbstractPage {
     @FindBy(xpath = "//*[@id=\"ticketTable\"]/tbody/tr[1]/td[2]/div/a")
     private WebElement ticketLink;
 
+    @Step("Поиск ticket: {ticket.summary}")
     public String findTicketUrl(TicketPojo ticket) {
         this.open();
         searchField.sendKeys(ticket.getSummary());
         searchButton.click();
+        takeScreenshot();
         return ticketLink.getAttribute("href");
     }
 }
