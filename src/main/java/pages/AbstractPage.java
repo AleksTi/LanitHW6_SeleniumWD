@@ -24,7 +24,7 @@ public abstract class AbstractPage {
         PageFactory.initElements(driver, this);
     }
 
-    @Step("Открытие страницы {0}")
+    @Step("Открытие страницы")
     public void open() {
         this.driver.get(url);
         takeScreenshot();
